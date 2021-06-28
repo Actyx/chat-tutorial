@@ -1,16 +1,24 @@
+// [[start:import]]
 import { FishId, Pond, Fish, Tag } from '@actyx/pond';
-import manifest from './manifest.json';
+// [[end:import]]
 
+// [[start:event-and-state]]
 type ChatEvent = string;
 type ChatState = ChatEvent[];
+// [[end:event-and-state]]
 
+// [[start:initial-state]]
 const INITIAL_STATE: ChatState = [];
+// [[end:initial-state]]
 
+// [[start:on-event]]
 function onEvent(state: ChatState, event: ChatEvent) {
   state.push(event);
   return state;
 }
+// [[end:on-event]]
 
+// [[start:fish]]
 const chatTag = Tag<ChatEvent>('ChatMessage');
 const ChatFish: Fish<ChatState, ChatEvent> = {
   fishId: FishId.of('ax.example.chat', 'MyChatFish', 0),
@@ -18,8 +26,14 @@ const ChatFish: Fish<ChatState, ChatEvent> = {
   onEvent: onEvent,
   where: chatTag,
 };
+// [[end:fish]]
 
-Pond.default(manifest)
+// [[start:pond]]
+Pond.default({
+  appId: "com.example.chat",
+  displayName: "Chat App",
+  version: "2.0",
+})
   .then((pond) => {
     // Select UI elements in the DOM
     const messagesTextArea = document.getElementById('messages');
@@ -46,3 +60,4 @@ Pond.default(manifest)
     });
   })
   .catch(console.log);
+// [[end:pond]]
